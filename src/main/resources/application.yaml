@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: logprocessor
+  cloud:
+    function:
+      definition: rawLogSubscriber
+
+    stream:
+      bindings:
+        processRawLog-in-0:
+          destination: ${SOLACE_RAW_LOG_TOPIC:logs/raw}
+          group: ${SOLACE_RAW_LOG_QUEUE:raw-logs.queue}
+          content-type: ${SOLACE_INPUT_CONTENT_TYPE:application/json}
+
+        processedLogPublisher-out-0:
+          destination: ${SOLACE_PROCESSED_LOG_TOPIC:logs/processed}
+          content-type: ${SOLACE_OUTPUT_CONTENT_TYPE:application/json}
+
+        dmqPublisher-out-0:
+          destination: ${SOLACE_DMQ_DESTINATION:raw-logs.dmq}
+          content-type: ${SOLACE_DMQ_CONTENT_TYPE:application/json}
+
+      # ============================================================
+      # SOLACE BINDER CONFIGURATION
+      # ============================================================
+      solace:
+        bindings:
+          rawLogSubscriber-in-0:
+            consumer:
+              endpointType: ${SOLACE_RAW_LOG_ENDPOINT_TYPE:queue}
+
+          processedLogPublisher-out-0:
+            producer:
+              deliveryMode: ${SOLACE_PROCESSED_LOG_DELIVERY_MODE:persistent}
+
+          dmqPublisher-out-0:
+            producer:
+              deliveryMode: ${SOLACE_DMQ_DELIVERY_MODE:persistent}
+
+
+# ==================================================================
+# SOLACE CONNECTION
+# ==================================================================
+solace:
+  java:
+    host: ${SOLACE_HOST:}
+    msg-vpn: ${SOLACE_MSG_VPN:}
+    client-username: ${SOLACE_USERNAME:}
+    client-password: ${SOLACE_PASSWORD:}
+
+
+
