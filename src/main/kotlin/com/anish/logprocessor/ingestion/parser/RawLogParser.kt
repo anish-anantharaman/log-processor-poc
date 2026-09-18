@@ -1,6 +1,5 @@
 package com.anish.logprocessor.ingestion.parser
 
-import com.anish.logprocessor.ingestion.subscriber.RawLogSubscriber
 import com.anish.logprocessor.model.RawLog
 import com.anish.logprocessor.util.enums.LogLevel
 import org.slf4j.LoggerFactory
@@ -13,14 +12,16 @@ import java.time.format.DateTimeParseException
 @Component
 class RawLogParser(private val objectMapper: ObjectMapper) {
     companion object {
-        private val log = LoggerFactory.getLogger(RawLogSubscriber::class.java)
+        private val log = LoggerFactory.getLogger(RawLogParser::class.java)
     }
 
     fun parseAndValidate(payload: String): RawLog {
         val rawLog = try {
             objectMapper.readValue<RawLog>(payload)
         } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid JSON: {}", e)
+            val reason = e.message?.takeIf { it.isNotBlank() } ?: "Malformed JSON payload"
+            log.error("Invalid JSON payload: {}", reason, e)
+            throw IllegalArgumentException("Invalid JSON payload: $reason", e)
         }
         validate(rawLog)
         return rawLog

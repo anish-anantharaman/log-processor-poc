@@ -7,7 +7,7 @@ spring:
 
     stream:
       bindings:
-        processRawLog-in-0:
+        rawLogSubscriber-in-0:
           destination: ${SOLACE_RAW_LOG_TOPIC:logs/raw}
           group: ${SOLACE_RAW_LOG_QUEUE:raw-logs.queue}
           content-type: ${SOLACE_INPUT_CONTENT_TYPE:application/json}
