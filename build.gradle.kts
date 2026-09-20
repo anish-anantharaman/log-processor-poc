@@ -23,7 +23,7 @@ extra["springCloudVersion"] = "2025.1.2"
 dependencies {
 	implementation("org.springframework.cloud:spring-cloud-stream")
 	implementation("org.springframework.boot:spring-boot-starter-integration")
-	implementation("com.solace.spring.cloud:spring-cloud-stream-binder-solace:5.11.0")
+	implementation("com.solace.spring.cloud:spring-cloud-stream-binder-solace:6.1.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -6,28 +6,23 @@ import com.anish.logprocessor.ingestion.parser.RawLogParser
 import com.anish.logprocessor.model.DmqMessage
 import com.anish.logprocessor.solace.publisher.ProcessedLogPublisher
 import org.slf4j.LoggerFactory
-import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 import java.time.Instant
-import java.util.function.Consumer
 
-@Component
+@Component("rawLogSubscriber")
 class RawLogSubscriber(
     private val rawLogParser: RawLogParser,
     private val logEventMapper: LogEventMapper,
     private val processedLogPublisher: ProcessedLogPublisher,
     private val dmqPublisher: DmqPublisher
-    ) {
+    ) : (String) -> Unit {
     companion object {
         private val log = LoggerFactory.getLogger(RawLogSubscriber::class.java)
     }
 
-    @Bean
-    fun rawLogSubscriber(): Consumer<String> {
-        return Consumer{ payload ->
-            log.info("Received raw log: {}", payload)
-                process(payload)
-        }
+    override fun invoke(payload: String) {
+        log.info("Received raw log: {}", payload)
+        process(payload)
     }
 
     private fun process(payload: String) {

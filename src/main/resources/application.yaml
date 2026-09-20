@@ -1,3 +1,6 @@
+server:
+  port: ${SERVER_PORT:8081}
+
 spring:
   application:
     name: logprocessor
@@ -43,10 +46,10 @@ spring:
 # ==================================================================
 solace:
   java:
-    host: ${SOLACE_HOST:}
-    msg-vpn: ${SOLACE_MSG_VPN:}
-    client-username: ${SOLACE_USERNAME:}
-    client-password: ${SOLACE_PASSWORD:}
+    host: ${SOLACE_HOST:localhost:55555}
+    msg-vpn: ${SOLACE_MSG_VPN:default}
+    client-username: ${SOLACE_USERNAME:admin}
+    client-password: ${SOLACE_PASSWORD:admin}
 
 
 
